@@ -1,0 +1,145 @@
+COMPONENTS LIST:-
+ESP32 Development Board
+Soil Moisture Sensor
+5V Relay Module
+Mini DC Water Pump
+Water Pipe
+Breadboard
+Jumper Wires
+5V Adapter
+USB Cable
+Arduino IDE
+
+PROJECT DESCRIPTION:-
+The objective of this project is to develop an IoT-based automatic irrigation system capable of watering plants without human intervention.
+
+The soil moisture sensor continuously measures moisture levels. These readings are processed by the ESP32 microcontroller. Whenever the moisture level drops below a predefined threshold, the ESP32 activates a relay module, which powers a water pump. Once sufficient moisture is detected, the pump is switched off automatically.
+
+The system improves water efficiency and is suitable for smart agriculture, home gardening, and greenhouse applications.
+
+TECHNOLOGY USED:-
+ESP32
+Arduino IDE
+Embedded C++
+IoT
+Relay Control
+Sensor Interfacing
+
+
+CODE:-
+/*
+==================================================
+   Automated Plant Watering System using ESP32
+   Author : Sujal Gharde
+   Board  : ESP32
+==================================================
+*/
+
+// Pin Definitions
+#define SOIL_SENSOR 34     // Analog pin
+#define RELAY_PIN 26       // Relay Module
+
+// Moisture Threshold
+int moistureThreshold = 2500;
+
+void setup()
+{
+  Serial.begin(115200);
+
+  pinMode(RELAY_PIN, OUTPUT);
+
+  // Pump OFF initially
+  digitalWrite(RELAY_PIN, HIGH);
+
+  Serial.println("--------------------------------");
+  Serial.println("Automated Plant Watering System");
+  Serial.println("--------------------------------");
+}
+
+void loop()
+{
+  // Read Soil Moisture
+  int moistureValue = analogRead(SOIL_SENSOR);
+
+  Serial.print("Soil Moisture Value : ");
+  Serial.println(moistureValue);
+
+  // Check moisture level
+  if (moistureValue > moistureThreshold)
+  {
+    Serial.println("Soil is Dry");
+    Serial.println("Pump ON");
+
+    digitalWrite(RELAY_PIN, LOW);
+
+    delay(5000);      // Water for 5 seconds
+
+    digitalWrite(RELAY_PIN, HIGH);
+
+    Serial.println("Pump OFF");
+  }
+  else
+  {
+    Serial.println("Soil is Wet");
+    Serial.println("No Watering Required");
+
+    digitalWrite(RELAY_PIN, HIGH);
+  }
+
+  Serial.println("---------------------------");
+
+  delay(2000);
+}
+
+
+
+Working Principle:-
+
+ESP32 continuously reads the soil moisture sensor.
+Sensor sends analog values to ESP32.
+ESP32 compares the value with the threshold.
+If soil is dry:
+Relay turns ON.
+Water pump starts.
+After watering:
+Relay turns OFF.
+System repeats the process continuously.
+
+
+
+FLOWCHART:-
+                 START
+                    │
+                    ▼
+          Initialize ESP32
+                    │
+                    ▼
+      Read Soil Moisture Sensor
+                    │
+                    ▼
+     Is Moisture > Threshold?
+          /                 \
+        YES                 NO
+        │                    │
+        ▼                    ▼
+  Soil is Dry         Soil is Wet
+        │                    │
+        ▼                    ▼
+ Turn Relay ON        Keep Relay OFF
+        │                    │
+        ▼                    │
+ Run Water Pump              │
+   for 5 Seconds             │
+        │                    │
+        ▼                    │
+ Turn Relay OFF              │
+         \                  /
+          \                /
+           ▼              ▼
+         Wait 2 Seconds
+                │
+                ▼
+       Read Sensor Again
+                │
+                ▼
+              Repeat
